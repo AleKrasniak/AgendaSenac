@@ -1,15 +1,16 @@
 <?php
 session_start();
-require 'Usuario.php';
+require 'classes/usuario.class.php';
 
+// Apenas ADM pode acessar
 if (!isset($_SESSION['usuario']) || !Usuario::temPermissao($_SESSION['usuario'], 'adm')) {
     header('Location: login.php');
     exit;
 }
 
 $usuarioObj = new Usuario();
-
 $id = $_GET['id'] ?? null;
+
 if (!$id) {
     die("ID do usuário não informado.");
 }
@@ -19,7 +20,8 @@ if (!$usuarioEditar) {
     die("Usuário não encontrado.");
 }
 
-$permissoesDisponiveis = ['usuario', 'adm', 'gerente']; // Exemplo terceira permissão
+// Permissões disponíveis no sistema
+$permissoesDisponiveis = ['usuario', 'adm', 'gerente'];
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nome = $_POST['nome'];
@@ -30,14 +32,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $resultado = $usuarioObj->editar($id, $nome, $email, $senha, $permissoesStr);
     if ($resultado === TRUE) {
-        echo "Usuário atualizado com sucesso.";
-        // redirecionar ou mostrar mensagem
+        header("Location: usuarios.php?msg=atualizado");
+        exit;
     } else {
-        echo "Erro: " . $resultado;
+        echo "<p style='color:red;'>Erro: $resultado</p>";
     }
 }
-
 ?>
+
+<h1>Editar Usuário</h1>
 
 <form method="post">
     Nome: <input type="text" name="nome" value="<?= htmlspecialchars($usuarioEditar['nome']) ?>" required><br>
