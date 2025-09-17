@@ -9,16 +9,16 @@ if(!empty($_GET['id'])){
     $id = $_GET['id']; // pega corretamente
     $resultado = $con->deletar($id); // chama o método com parênteses
     if($resultado === TRUE){
-        header("Location: /agendaSenac2025");
+        header("Location: index2.php");
         exit;
     } else {
         echo '<script>alert("Erro ao excluir contato: '.$resultado.'");</script>';
-        header("Location: /agendaSenac2025");
+        header("Location: index2.php");
         exit;
     }
 }else{
     echo '<script>alert("ID inválido!");</script>';
-    header("Location: /agendaSenac2025");
+    header("Location: index2.php");
     exit;
 }
 ?>

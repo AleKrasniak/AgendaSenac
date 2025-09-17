@@ -1,5 +1,5 @@
 <?php 
-require 'inc/header.inc.php';
+// require 'inc/header.inc.php';
 include 'classes/contatos.class.php';
 $contatos = new Contatos();
 
@@ -8,11 +8,11 @@ if (!empty($_GET['id'])) {
     $info = $contatos->buscar($id);
 
     if (empty($info) || empty($info['email'])) {
-        header("Location: /agendasenac2025");
+        header("Location: index2.php");
         exit;
     }
 } else {
-    header("Location: /agendasenac2025");
+    header("Location: index2.php");
     exit;
 }
 ?>
@@ -35,4 +35,4 @@ if (!empty($_GET['id'])) {
     <input type="submit" name="btCadastrar" value="SALVAR" class="btn-adicionar"/>
 </form>
 
-<?php require 'inc/footer.inc.php'?>
+<!-- <?php require 'inc/footer.inc.php'?> -->

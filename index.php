@@ -3,7 +3,7 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-include 'inc/header.inc.php';
+// include 'inc/header.inc.php';
 include 'classes/usuario.class.php';
 
 $usuarioObj = new Usuario();
@@ -44,4 +44,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <p>Já tem conta? <a href="login.php">Faça login aqui</a></p>
 
-<?php include 'inc/footer.inc.php'; ?>
+<!-- <?php include 'inc/footer.inc.php'; ?> -->

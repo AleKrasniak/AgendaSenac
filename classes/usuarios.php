@@ -1,6 +1,6 @@
 <?php
 session_start();
-require 'classes/usuario.class.php';
+require_once __DIR__ . "/conexao.class.php";
 
 // Apenas ADM pode acessar
 if (!isset($_SESSION['usuario']) || !Usuario::temPermissao($_SESSION['usuario'], 'adm')) {

@@ -3,7 +3,7 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-include 'inc/header.inc.php';
+// include 'inc/header.inc.php';
 include 'classes/contatos.class.php';
 include 'classes/funcoes.class.php';
 include 'classes/usuario.class.php';
@@ -64,7 +64,7 @@ $fn = new funcoes();
                 <td><?php echo $item['ativo'] ? 'Sim' : 'Não'; ?></td>
                 <td>
                     <?php if (Usuario::temPermissao($usuario, 'adm')): ?>
-                        <a href="editarContato.php?id=<?php echo $item['id']; ?>">Editar</a>
+                        <a href="editar.Contato.php?id=<?php echo $item['id']; ?>">Editar</a>
                         <a href="excluirContato.php?id=<?php echo $item['id']; ?>" onclick="return confirm('Você tem certeza que deseja excluir?')">Excluir</a>
                     <?php else: ?>
                         Apenas visualização
@@ -75,4 +75,4 @@ $fn = new funcoes();
     </tbody>
 </table>
 
-<?php include 'inc/footer.inc.php'; ?>
+<!-- <?php include 'inc/footer.inc.php'; ?> -->

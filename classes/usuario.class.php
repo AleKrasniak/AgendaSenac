@@ -1,5 +1,6 @@
 <?php
-require 'conexao.class.php';
+require_once __DIR__ . "/conexao.class.php";
+
 
 class Usuario {
     private $con;

@@ -3,19 +3,20 @@ session_start();
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-include 'classes/usuario.class.php';
+require 'classes/usuario.class.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = $_POST['email'] ?? '';
     $senha = $_POST['senha'] ?? '';
 
-    $usuario = Usuario::login($email, $senha);
+    $u = new Usuario(); // cria objeto
+    $usuario = $u->login($email, $senha);
 
     if ($usuario) {
         $_SESSION['usuario'] = $usuario;
 
-        // Redireciona de acordo com o tipo
-        if ($usuario['tipo'] === 'adm') {
+        // Redireciona de acordo com as permissões
+        if (Usuario::temPermissao($usuario, 'adm')) {
             header("Location: index2.php");
         } else {
             header("Location: agenda.php");

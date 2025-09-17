@@ -1,4 +1,4 @@
-<?php require'inc/header.inc.php'?>
+
 <br>
     <form class="form" method="POST" action="adicionarContatoSubmit.php">
         <h1 class="title">ADICIONAR</h1>
@@ -20,4 +20,3 @@
     </form>
 <br>
 
-<?php require 'inc/footer.inc.php'?>
