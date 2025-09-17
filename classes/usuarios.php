@@ -29,13 +29,13 @@ $listaUsuarios = $usuarioObj->listar(); // Pega todos os usuários
     <tbody>
         <?php foreach ($listaUsuarios as $u): ?>
             <tr>
-                <td><?= $u['ID'] ?></td>
-                <td><?= htmlspecialchars($u['nome']) ?></td>
-                <td><?= htmlspecialchars($u['email']) ?></td>
-                <td><?= htmlspecialchars($u['permissoes']) ?></td>
+                <td><?php echo $u['ID']; ?></td>
+                <td><?php echo $u['nome']; ?></td>
+                <td><?php echo $u['email']; ?></td>
+                <td><?php echo $u['permissoes']; ?></td>
                 <td>
-                    <a href="editarUsuario.php?id=<?= $u['ID'] ?>">Editar</a> |
-                    <a href="excluirUsuario.php?id=<?= $u['ID'] ?>" onclick="return confirm('Tem certeza que deseja excluir este usuário?')">Excluir</a>
+                    <a href="editarUsuario.php?id=<?php echo $u['ID']; ?>">Editar</a> |
+                    <a href="excluirUsuario.php?id=<?php echo $u['ID']; ?>" onclick="return confirm('Tem certeza que deseja excluir este usuário?')">Excluir</a>
                 </td>
             </tr>
         <?php endforeach; ?>
