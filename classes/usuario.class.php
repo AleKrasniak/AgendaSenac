@@ -2,11 +2,6 @@
 require 'conexao.class.php';
 
 class Usuario {
-    private $id;
-    private $nome;
-    private $email;
-    private $senha; // senha hash
-    private $permissoes; // string, ex: "usuario,adm"
     private $con;
 
     public function __construct() {
@@ -32,21 +27,19 @@ class Usuario {
         $senhaHash = password_hash($senha, PASSWORD_DEFAULT);
 
         // Verifica se já existe algum ADM no sistema
-        $stmt = $this->pdo->query("SELECT COUNT(*) FROM usuario WHERE FIND_IN_SET('adm', permissoes)");
+        $stmt = $this->con->conectar()->query("SELECT COUNT(*) FROM usuario WHERE FIND_IN_SET('adm', permissoes)");
         $temAdm = $stmt->fetchColumn();
 
         // Se não existe, este será o primeiro ADM
         $permissoes = $temAdm == 0 ? 'adm' : 'usuario';
 
-        $sql = "INSERT INTO usuario (nome, email, senha, permissoes) VALUES (?, ?, ?, ?)";
-        $stmt = $this->pdo->prepare($sql);
-
-        if ($stmt->execute([$nome, $email, $senhaHash, $permissoes])) {
+        $sql = $this->con->conectar()->prepare("INSERT INTO usuario (nome, email, senha, permissoes) VALUES (?, ?, ?, ?)");
+        if ($sql->execute([$nome, $email, $senhaHash, $permissoes])) {
             return TRUE;
         } else {
-            return $stmt->errorInfo()[2];
+            return $sql->errorInfo()[2];
         }
-}
+    }
 
     // Login: verifica email e senha, retorna dados do usuário se ok
     public function login($email, $senha) {
@@ -56,7 +49,6 @@ class Usuario {
             $sql->execute();
             $usuario = $sql->fetch(PDO::FETCH_ASSOC);
             if ($usuario && password_verify($senha, $usuario['senha'])) {
-                // Retorna dados do usuário (sem senha)
                 unset($usuario['senha']);
                 return $usuario;
             } else {
@@ -70,7 +62,7 @@ class Usuario {
     // Listar todos os usuários (para admin)
     public function listar() {
         try {
-            $sql = $this->con->conectar()->prepare("SELECT ID, nome, email, permissoes FROM usuario");
+            $sql = $this->con->conectar()->prepare("SELECT ID, nome, email, permissoes FROM usuario ORDER BY ID ASC");
             $sql->execute();
             return $sql->fetchAll(PDO::FETCH_ASSOC);
         } catch (PDOException $ex) {
@@ -90,12 +82,12 @@ class Usuario {
         }
     }
 
-    // Editar usuário (admin pode editar qualquer usuário, usuário pode editar só ele mesmo)
+    // Editar usuário (admin pode editar qualquer usuário)
     public function editar($id, $nome, $email, $senha = null, $permissoes = null) {
-        $emailExistente = $this->existeEmail($email, $id);
-        if (!empty($emailExistente)) {
-            return FALSE; // email já usado por outro
+        if (!empty($this->existeEmail($email, $id))) {
+            return 'Erro: Email já cadastrado.';
         }
+
         try {
             if ($senha) {
                 $hashSenha = password_hash($senha, PASSWORD_DEFAULT);
@@ -122,6 +114,7 @@ class Usuario {
                     );
                 }
             }
+
             $sql->bindParam(':nome', $nome, PDO::PARAM_STR);
             $sql->bindParam(':email', $email, PDO::PARAM_STR);
             $sql->bindParam(':id', $id, PDO::PARAM_INT);
